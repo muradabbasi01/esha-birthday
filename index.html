@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>✨ Esha's Enchanted Birthday ✨</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0a0a0a;
+    font-family: 'Segoe UI', 'Poppins', 'Dancing Script', cursive, sans-serif;
+    color: #fff3e6;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+#countdown {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #1a0010, #000000);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    text-align: center;
+    backdrop-filter: blur(2px);
+}
+
+.countdown-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #ff99cc, #ff4d88);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 2px;
+}
+
+.timer {
+    font-size: 3rem;
+    font-weight: bold;
+    font-family: monospace;
+    background: rgba(0,0,0,0.6);
+    padding: 1rem 2rem;
+    border-radius: 60px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 20px rgba(255,77,136,0.3);
+    letter-spacing: 4px;
+}
+
+.timer span {
+    font-size: 1.5rem;
+    display: inline-block;
+    margin: 0 0.2rem;
+}
+
+.message {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+#intro {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #1a0010, #000000);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(2px);
+    transition: opacity 1s ease;
+}
+
+#intro h1 {
+    font-size: 3rem;
+    background: linear-gradient(135deg, #ff99cc, #ff4d88);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 15px rgba(255,77,136,0.4);
+    letter-spacing: 2px;
+    opacity: 0;
+    animation: fadeGlow 2s forwards;
+}
+
+#enterBtn {
+    margin-top: 2rem;
+    padding: 14px 38px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(45deg, #ff4d88, #ff99cc);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 15px #ff4d88;
+    transition: 0.3s;
+    opacity: 0;
+    animation: fadeGlow 2.5s forwards;
+}
+
+#enterBtn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #ff99cc;
+}
+
+.container {
+    display: none;
+    position: relative;
+    min-height: 100vh;
+    padding: 30px 20px;
+    background: rgba(0,0,0,0.7);
+    z-index: 2;
+    text-align: center;
+}
+
+.watermark-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.watermark-text {
+    position: absolute;
+    white-space: nowrap;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: rgba(255, 200, 220, 0.18);
+    font-family: 'Dancing Script', cursive;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transform: rotate(-5deg);
+    user-select: none;
+    pointer-events: none;
+    text-shadow: 0 0 6px #ff99cc;
+    animation: floatWatermark 20s linear infinite;
+}
+
+@keyframes floatWatermark {
+    0% { transform: translateY(0px) rotate(-5deg); opacity: 0.12; }
+    50% { transform: translateY(-15px) rotate(-3deg); opacity: 0.2; }
+    100% { transform: translateY(0px) rotate(-5deg); opacity: 0.12; }
+}
+
+.story-block {
+    max-width: 650px;
+    margin: 20px auto;
+    background: rgba(255, 77, 136, 0.15);
+    backdrop-filter: blur(12px);
+    padding: 20px 24px;
+    border-radius: 60px;
+    font-size: 1.6rem;
+    font-weight: 500;
+    font-family: 'Segoe UI', cursive;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transform: translateY(40px);
+    transition: 1s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    letter-spacing: 0.5px;
+}
+
+.story-block.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+button {
+    padding: 12px 28px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(95deg, #ff4d88, #ff99cc);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0 4px 12px rgba(255,77,136,0.4);
+}
+
+button:hover {
+    transform: scale(1.02);
+    filter: brightness(1.05);
+}
+
+#startBtn {
+    margin: 20px auto;
+    font-size: 1.4rem;
+    padding: 14px 38px;
+}
+
+#proposal {
+    display: none;
+    background: rgba(0,0,0,0.5);
+    padding: 30px 20px;
+    border-radius: 70px;
+    backdrop-filter: blur(8px);
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    margin: 40px auto 60px auto;
+    position: relative;
+}
+
+.ring {
+    font-size: 6rem;
+    margin-bottom: 20px;
+    animation: ringGlow 1.5s infinite alternate;
+    display: inline-block;
+}
+
+@keyframes ringGlow {
+    0% { text-shadow: 0 0 10px gold, 0 0 20px #ff99cc; transform: scale(1); }
+    100% { text-shadow: 0 0 30px #ffd700, 0 0 40px #ff4d88; transform: scale(1.05); }
+}
+
+#proposal h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #ffc0e0;
+}
+
+#noBtn {
+    margin-left: 20px;
+    background: #333;
+    transition: 0.1s;
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
+}
+
+.video-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 300;
+    justify-content: center;
+    align-items: center;
+}
+
+#cakeVideo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+#images {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 200;
+    overflow: hidden;
+}
+
+#images img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 2s ease, transform 6s ease;
+    transform: scale(1);
+}
+
+#images img.active {
+    opacity: 1;
+    transform: scale(1.08);
+}
+
+.slideshow-text {
+    position: fixed;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(12px);
+    padding: 14px 28px;
+    border-radius: 60px;
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #ffd966;
+    border: 1px solid #ff99cc;
+    font-family: 'Dancing Script', cursive;
+    z-index: 250;
+    letter-spacing: 2px;
+    box-shadow: 0 0 25px #ff4d88;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: fadeGlow 0.5s ease;
+}
+
+@media (max-width: 600px) {
+    .slideshow-text {
+        font-size: 1.2rem;
+        padding: 8px 16px;
+        white-space: normal;
+        width: 90%;
+        bottom: 15%;
+    }
+}
+
+.confetti {
+    position: fixed;
+    top: -20px;
+    font-size: 1.8rem;
+    pointer-events: none;
+    z-index: 999;
+    animation: fallConfetti linear forwards;
+}
+
+@keyframes fallConfetti {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeGlow {
+    0% { opacity: 0; text-shadow: 0 0 0px transparent; }
+    100% { opacity: 1; text-shadow: 0 0 12px #ff99cc; }
+}
+
+@media (max-width: 600px) {
+    .story-block {
+        font-size: 1.2rem;
+        padding: 14px 20px;
+        margin: 15px 12px;
+    }
+    #proposal h2 {
+        font-size: 1.6rem;
+    }
+    .ring {
+        font-size: 4rem;
+    }
+    .watermark-text {
+        font-size: 1.2rem;
+        white-space: nowrap;
+    }
+    .timer {
+        font-size: 2rem;
+        padding: 0.8rem 1.5rem;
+    }
+    .countdown-title {
+        font-size: 1.8rem;
+    }
+    #images img {
+        object-fit: contain;
+    }
+}
+
+.container > h1 {
+    font-size: 2rem;
+    background: linear-gradient(120deg, #ffb3c6, #ff99cc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 25px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+
+<!-- COUNTDOWN OVERLAY -->
+<div id="countdown">
+    <div class="countdown-title">🌸 Esha's Birthday Countdown 🌸</div>
+    <div class="timer">
+        <span id="days">00</span>d : <span id="hours">00</span>h : <span id="minutes">00</span>m : <span id="seconds">00</span>s
+    </div>
+    <div class="message">✨ The magic will unlock at 12:00AM on March 31, 2026 ✨</div>
+</div>
+
+<!-- INTRO SCREEN -->
+<div id="intro">
+    <h1>✨ For My Eshuu Ranii ✨</h1>
+    <button id="enterBtn" onclick="enterSite()">🌸 Enter The Magic 🌸</button>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container" id="main">
+    <div id="watermarkWrapper" class="watermark-bg"></div>
+    <h1>💗 khoobsurat paigham… tumhare naam 💗</h1>
+    <div id="story"></div>
+    <button id="startBtn" onclick="startParty()">🎂 Let's Celebrate 🎉</button>
+    <div id="proposal">
+        <div class="ring">💐 💍 💐</div>
+        <h2>🌹 Will you be mine forever? 🌹</h2>
+        <button onclick="yesClicked()">Yes ❤️ Forever</button>
+        <button id="noBtn" onmouseover="moveNo(event)" ontouchstart="moveNo(event)" onclick="moveNo(event)">
+            🌸 My heart whispers yes… but chase me first 🌸
+        </button>
+    </div>
+</div>
+
+<!-- VIDEO CONTAINER -->
+<div class="video-container" id="videoContainer">
+    <video id="cakeVideo" controls autoplay muted playsinline>
+        <source src="cvideo.mp4" type="video/mp4">
+    </video>
+</div>
+
+<!-- SLIDESHOW IMAGES (12 images) -->
+<div id="images">
+    <img src="1.jpeg" alt="Memory 1 - Happy Birthday Eshu Ranii">
+    <img src="2.jpeg" alt="Memory 2 - Esha">
+    <img src="3.jpeg" alt="Memory 3 - Beautiful moments">
+    <img src="4.jpeg" alt="Memory 4 - Funny Moments">
+    <img src="5.jpeg" alt="Memory 5 - Night's Moments">
+    <img src="6.jpeg" alt="Memory 6 - Funny Moments During Lays">
+    <img src="7.jpeg" alt="Memory 7 - Best Moments">
+    <img src="8.jpeg" alt="Memory 8 - In Mall">
+    <img src="9.jpeg" alt="Memory 9 - With Bestu and girlfriend">
+    <img src="10.jpeg" alt="Memory 10 - Serious Situation">
+    <img src="11.jpeg" alt="Memory 11 - Romantic and Funny">
+    <img src="12.jpeg" alt="Memory 12 - Esha Mobile Addict">
+</div>
+
+<audio id="bgMusic" loop preload="auto">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// ----------------------------- COUNTDOWN LOGIC -----------------------------
+const unlockDate = new Date(2026, 2, 28, 19, 30, 0); // March 31, 2026, 00:00:00/
+
+function updateCountdown() {
+    const now = new Date();
+    const diff = unlockDate - now;
+    if (diff <= 0) {
+        document.getElementById('countdown').style.display = 'none';
+        document.getElementById('intro').style.display = 'flex';
+        if (window.countdownInterval) clearInterval(window.countdownInterval);
+        return;
+    }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    document.getElementById('days').textContent = String(days).padStart(2, '0');
+    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+}
+if (unlockDate > new Date()) {
+    updateCountdown();
+    window.countdownInterval = setInterval(updateCountdown, 1000);
+} else {
+    document.getElementById('countdown').style.display = 'none';
+    document.getElementById('intro').style.display = 'flex';
+}
+
+// ----------------------------- REST OF THE CODE -----------------------------
+function createWatermarkText() {
+    const watermarkContainer = document.getElementById('watermarkWrapper');
+    if (!watermarkContainer) return;
+    watermarkContainer.innerHTML = '';
+    const phrases = ['Happy Birthday Eshu Ranii 💖', 'Eshu Ranii 💖', '🎂 Esha ❤️', 'Forever & Always ✨'];
+    for (let i = 0; i < 32; i++) {
+        const span = document.createElement('div');
+        span.classList.add('watermark-text');
+        let text = phrases[i % phrases.length];
+        if (i % 3 === 0) text = 'Happy Birthday Eshu Ranii 💖';
+        if (i % 5 === 0) text = 'Eshu Ranii 💖✨';
+        span.innerText = text;
+        const leftPos = Math.random() * 100;
+        const topPos = Math.random() * 100;
+        const rotation = (Math.random() * 20) - 10;
+        const fontSize = 1 + Math.random() * 1.4;
+        const opacityVal = 0.1 + Math.random() * 0.12;
+        span.style.left = leftPos + '%';
+        span.style.top = topPos + '%';
+        span.style.transform = `rotate(${rotation}deg)`;
+        span.style.fontSize = fontSize + 'rem';
+        span.style.opacity = opacityVal;
+        span.style.animationDuration = 15 + Math.random() * 15 + 's';
+        span.style.animationDelay = Math.random() * 5 + 's';
+        watermarkContainer.appendChild(span);
+    }
+}
+
+function enterSite() {
+    const intro = document.getElementById('intro');
+    const mainDiv = document.getElementById('main');
+    intro.style.display = 'none';
+    mainDiv.style.display = 'block';
+    createWatermarkText();
+    startSubtleHeartRain();
+}
+
+let heartInterval;
+function startSubtleHeartRain() {
+    if (heartInterval) clearInterval(heartInterval);
+    heartInterval = setInterval(() => {
+        const heart = document.createElement('div');
+        heart.innerHTML = Math.random() > 0.6 ? '💖' : '🌸';
+        heart.style.position = 'fixed';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.bottom = '-20px';
+        heart.style.fontSize = (Math.random() * 18 + 12) + 'px';
+        heart.style.opacity = 0.5;
+        heart.style.pointerEvents = 'none';
+        heart.style.zIndex = '998';
+        heart.style.animation = 'floatUp 7s ease-out forwards';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 7000);
+    }, 800);
+}
+const styleSheet = document.createElement("style");
+styleSheet.textContent = `
+    @keyframes floatUp {
+        0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+        100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+    }
+`;
+document.head.appendChild(styleSheet);
+
+const storyMessages = [
+    "Sach bataun? 😌",
+    "Us din jab maine tumhe pehli baar dekha tha... 👀 13 February 2024... 📅 Islamabad ke ek mart mein... 🏬",
+    "Main wahan apni ek dost se milne gaya tha... Lekin phir... Meri nazar tum par padi... ❤️ Aur us lamhe main sab kuch bhool gaya... Apni dost bhi... Aur duniya bhi... Bas tum reh gayi... ✨💕",
+    "Mujhe us waqt hi samajh aa gaya tha... Ke meri life ab normal nahi rehne wali... 😶‍🌫️",
+    "Aur main galat nahi tha... Tum meri aadat ban gayi... 💞 Meri zarurat ban gayi... 🤍 Meri har khushi ka reason ban gayi... 😊❤️",
+    "Haan, hum larte hain... 😅 Kabhi kabhi bohat zyada... 😤 Bilkul Tom & Jerry ki tarah... 🐭🐱 Lekin jitna bhi lar lein... End mein baat wahi hoti hai... Main tumhare bina reh nahi sakta... 💔➡️❤️ Aur shayad tum bhi nahi... 😌💫",
+    "Thodi dair ki narazgi ke baad... Hum phir se waise hi ho jate hain... 💗 Jaise kuch hua hi na ho... ✨ Kyuki... Hum ek doosre ke baghair adhooray hain... 🫶",
+    "Logon ne koshish ki... Hume todne ki... Door karne ki... Lekin ek cheez unhe samajh nahi aayi... 😏 Hum normal couple nahi hain... Hum 'forever' type log hain... ♾️❤️",
+    "Aur aaj... Main bas itna kehna chahta hoon... 🎂 Happy Birthday, meri jan, meri Eshuu Ranii, Mela bacha, mela baby, mere shahzadii, mere namoni, mere shagoofi ... 👑💖 Tum meri life ka sab se khoobsurat hissa ho... 🌹 Aur hamesha rahogi... 💍❤️",
+];
+
+const storyDiv = document.getElementById('story');
+storyMessages.forEach((msg, idx) => {
+    let block = document.createElement('div');
+    block.className = 'story-block';
+    block.id = `storyBlock${idx}`;
+    storyDiv.appendChild(block);
+});
+
+let currentStoryIndex = 0;
+
+function typeWriterEffect(element, text, callback) {
+    let i = 0;
+    element.innerHTML = '';
+    function typing() {
+        if (i < text.length) {
+            element.innerHTML += text[i];
+            i++;
+            setTimeout(typing, 35);
+        } else {
+            if (callback) callback();
+        }
+    }
+    typing();
+}
+
+function displayNextStory() {
+    if (currentStoryIndex < storyMessages.length) {
+        const block = document.getElementById(`storyBlock${currentStoryIndex}`);
+        block.classList.add('visible');
+        typeWriterEffect(block, storyMessages[currentStoryIndex], () => {
+            currentStoryIndex++;
+            setTimeout(displayNextStory, 700);
+        });
+    } else {
+        document.getElementById('startBtn').style.display = 'none';
+        const proposal = document.getElementById('proposal');
+        proposal.style.display = 'block';
+        proposal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function startParty() {
+    const startBtn = document.getElementById('startBtn');
+    startBtn.style.display = 'none';
+    const music = document.getElementById('bgMusic');
+    music.play().catch(e => console.log("autoplay blocked, but user interaction ok"));
+    startConfettiRain();
+    displayNextStory();
+}
+
+let confettiInterval;
+function startConfettiRain() {
+    if (confettiInterval) clearInterval(confettiInterval);
+    confettiInterval = setInterval(() => {
+        for (let i = 0; i < 3; i++) {
+            const conf = document.createElement('div');
+            conf.className = 'confetti';
+            const symbols = ['💖', '🌹', '🎀', '✨', '🎂', '💗', '🌸'];
+            conf.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+            conf.style.left = Math.random() * 100 + '%';
+            conf.style.fontSize = (Math.random() * 24 + 14) + 'px';
+            conf.style.animationDuration = (Math.random() * 3 + 2.5) + 's';
+            conf.style.opacity = 0.8;
+            document.body.appendChild(conf);
+            setTimeout(() => conf.remove(), 5500);
+        }
+    }, 280);
+}
+
+let moveNoTimeout = null;
+function moveNo(event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.type === 'touchstart') {
+            event.target.addEventListener('click', function preventClick(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                event.target.removeEventListener('click', preventClick);
+            }, { once: true, capture: true });
+        }
+    }
+
+    if (moveNoTimeout) clearTimeout(moveNoTimeout);
+    moveNoTimeout = setTimeout(() => { moveNoTimeout = null; }, 300);
+
+    const btn = document.getElementById('noBtn');
+    const proposal = document.getElementById('proposal');
+    const rect = proposal.getBoundingClientRect();
+    const btnWidth = btn.offsetWidth;
+    const btnHeight = btn.offsetHeight;
+    const maxX = rect.width - btnWidth - 20;
+    const maxY = rect.height - btnHeight - 20;
+    let newLeft = Math.random() * Math.max(0, maxX);
+    let newTop = Math.random() * Math.max(0, maxY);
+    const yesBtn = document.querySelector('#proposal button:first-of-type');
+    const yesRect = yesBtn.getBoundingClientRect();
+    let overlap = true;
+    let attempts = 0;
+    while (overlap && attempts < 10) {
+        newLeft = Math.random() * Math.max(0, maxX);
+        newTop = Math.random() * Math.max(0, maxY);
+        const potentialRect = {
+            left: rect.left + newLeft,
+            right: rect.left + newLeft + btnWidth,
+            top: rect.top + newTop,
+            bottom: rect.top + newTop + btnHeight
+        };
+        if (potentialRect.right > yesRect.left && potentialRect.left < yesRect.right &&
+            potentialRect.bottom > yesRect.top && potentialRect.top < yesRect.bottom) {
+            attempts++;
+            continue;
+        }
+        overlap = false;
+    }
+    btn.style.position = 'absolute';
+    btn.style.left = newLeft + 'px';
+    btn.style.top = newTop + 'px';
+    btn.style.marginLeft = '0';
+    btn.style.transform = 'scale(0.9)';
+    setTimeout(() => { btn.style.transform = ''; }, 150);
+
+    // Romantic floating message
+    const poeticMessage = document.createElement('div');
+    poeticMessage.innerText = '💕 Chase me if you dare… but my heart already belongs to you 💕';
+    poeticMessage.style.position = 'fixed';
+    poeticMessage.style.bottom = '30%';
+    poeticMessage.style.left = '50%';
+    poeticMessage.style.transform = 'translateX(-50%)';
+    poeticMessage.style.background = 'rgba(0,0,0,0.7)';
+    poeticMessage.style.backdropFilter = 'blur(12px)';
+    poeticMessage.style.padding = '10px 20px';
+    poeticMessage.style.borderRadius = '50px';
+    poeticMessage.style.fontSize = '1.2rem';
+    poeticMessage.style.color = '#ffd966';
+    poeticMessage.style.fontFamily = 'cursive';
+    poeticMessage.style.zIndex = '1000';
+    poeticMessage.style.whiteSpace = 'nowrap';
+    poeticMessage.style.pointerEvents = 'none';
+    poeticMessage.style.animation = 'fadeGlow 0.5s ease';
+    document.body.appendChild(poeticMessage);
+    setTimeout(() => poeticMessage.remove(), 1500);
+
+    return false;
+}
+
+function yesClicked() {
+    const mainChildren = document.querySelectorAll('#main > *');
+    mainChildren.forEach(child => {
+        if (!child.classList?.contains('watermark-bg') && child.id !== 'watermarkWrapper') {
+            child.style.display = 'none';
+        }
+    });
+    const videoContainer = document.getElementById('videoContainer');
+    const video = document.getElementById('cakeVideo');
+    videoContainer.style.display = 'flex';
+
+    video.muted = false;
+    // No extra audio – only the video plays
+    
+    video.addEventListener('ended', function onEnded() {
+        video.removeEventListener('ended', onEnded);
+        videoContainer.style.display = 'none';
+        startSlideshowRomance();
+    });
+    video.play().catch(e => console.log("Video play failed:", e));
+}
+
+function startSlideshowRomance() {
+    const slideshowDiv = document.getElementById('images');
+    slideshowDiv.style.display = 'block';
+    const images = document.querySelectorAll('#images img');
+    let idx = 0;
+    images.forEach(img => img.classList.remove('active'));
+    
+    function showNextImage() {
+        images.forEach(img => img.classList.remove('active'));
+        images[idx].classList.add('active');
+        idx = (idx + 1) % images.length;
+        setTimeout(showNextImage, 3800);
+    }
+    showNextImage();
+    
+    const textLines = [
+        "🎈 HAPPY BIRTHDAY ESHU RANII 🎈",
+        "💖 You are the poetry my heart never knew it needed 💖",
+        "🌹 Every sunrise with you is a verse of forever 🌹",
+        "💕 Your laughter is the melody that silences all noise 💕",
+        "🎀 You are the dream I never want to wake from 🎀",
+        "✨ In a universe of stars, you are my brightest constellation ✨",
+        "🌸 To the girl who turned my ordinary into magic 🌸",
+        "🎂 May your days be filled with the love you so effortlessly give 🎂",
+        "💍 With you, forever feels like a promise already kept 💍",
+        "👑 You wear my heart like the crown it was always meant to be 👑",
+        "💐 My love for you stretches beyond the moon and all its tides 💐",
+        "🎉 Here’s to us – two souls, one heartbeat, forever 🎉"
+    ];
+    
+    let textDiv = document.querySelector('.slideshow-text');
+    if (!textDiv) {
+        textDiv = document.createElement('div');
+        textDiv.className = 'slideshow-text';
+        document.body.appendChild(textDiv);
+    }
+    
+    let textIndex = 0;
+    function updateText() {
+        textDiv.innerText = textLines[textIndex];
+        textIndex = (textIndex + 1) % textLines.length;
+    }
+    updateText();
+    if (window.textInterval) clearInterval(window.textInterval);
+    window.textInterval = setInterval(updateText, 3800);
+}
+
+function startHeartbeatGlow() {
+    setInterval(() => {
+        const mainDiv = document.getElementById('main');
+        if (mainDiv && mainDiv.style.display === 'block') {
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = 0;
+            overlay.style.left = 0;
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.background = 'radial-gradient(circle, rgba(255,77,136,0.05) 0%, rgba(0,0,0,0) 80%)';
+            overlay.style.pointerEvents = 'none';
+            overlay.style.zIndex = '1';
+            document.body.appendChild(overlay);
+            setTimeout(() => overlay.remove(), 400);
+        }
+    }, 4000);
+}
+
+window.addEventListener('load', () => {
+    startHeartbeatGlow();
+});
+</script>
+</body>
+</html>
